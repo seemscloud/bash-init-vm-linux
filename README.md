@@ -45,8 +45,8 @@ mkdir -p "${BASE_DIR}"
 cat > "${BASE_DIR}/${BASE_NAME}" << "EndOfMessage"
 #!/bin/bash
 
-systemctl stop ssh
-systemctl disable ssh
+(systemctl disable ssh || systemctl disable sshd) 2>/dev/null
+(systemctl stop ssh || systemctl stop sshd) 2>/dev/null
 rm -rfv /etc/ssh/ssh_host_*
 
 (apt-get update &&
