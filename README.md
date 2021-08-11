@@ -1,6 +1,6 @@
 `Prepared for:`
  - Ubuntu 18/20
- - Debian 10
+ - Debian 10 (`probably works on 8/9)
  - RHEL Family 7/8
 
 ```bash
