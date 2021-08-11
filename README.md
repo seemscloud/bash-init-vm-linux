@@ -15,7 +15,7 @@ cat > "${BASE_DIR}/${BASE_NAME}" << "EndOfMessage"
 
 DISTRO_NAME="`(lsb_release -a 2>/dev/null | grep -Po "Distributor ID:\t\K[a-zA-Z]*")`"
 
-if [ "${DISTRO_NAME}" == "Debian" ] || [ "${DISTRO_NAME}" == "Debian" ] ; then
+if [ "${DISTRO_NAME}" == "Ubuntu" ] || [ "${DISTRO_NAME}" == "Debian" ] ; then
   dpkg-reconfigure openssh-server
 elif [ "${DISTRO_NAME}" == "OracleServer" ] ; then
   ssh-keygen -q -N '' -t rsa -f /etc/ssh/ssh_host_rsa_key
