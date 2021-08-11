@@ -1,2 +1,34 @@
-[serverOut.log](https://github.com/theanotherwise/bash-init-linux/files/6971590/serverOut.log)
-# bash-init-linux
+```bash
+#!/bin/bash
+
+BASE_DIR="/root/scripts"
+BASE_NAME="init.sh"
+
+mkdir -p "${BASE_DIR}"
+
+cat > "${BASE_DIR}/${BASE_NAME}" << "EndOfMessage"
+#!/bin/bash
+
+(apt-get update || yum check-update) 2>/dev/null
+
+(apt-get install lsb-release -y || yum install redhat-lsb-core -y) 2>/dev/null
+
+DISTRO_NAME="`(lsb_release -a 2>/dev/null | grep -Po "Distributor ID:\t\K[a-zA-Z]*")`"
+
+if [ "${DISTRO_NAME}" == "Debian" ] || [ "${DISTRO_NAME}" == "Debian" ] ; then
+  dpkg-reconfigure openssh-server
+elif [ "${DISTRO_NAME}" == "OracleServer" ] ; then
+  ssh-keygen -q -N '' -t rsa -f /etc/ssh/ssh_host_rsa_key
+  ssh-keygen -q -N '' -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key
+  ssh-keygen -q -N '' -t ed25519 -f /etc/ssh/ssh_host_ed25519_key
+fi
+
+(systemctl enable ssh || systemctl enable sshd) 2>/dev/null
+(systemctl restart ssh || systemctl restart sshd) 2>/dev/null
+EndOfMessage
+
+chmod 700 "${BASE_DIR}"
+
+chmod 600 "${BASE_DIR}/${BASE_NAME}"
+chown root:root -R "${BASE_DIR}/${BASE_NAME}"
+```
