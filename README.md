@@ -1,4 +1,4 @@
-`Tested on:`
+`Prepared for:`
  - Ubuntu 18/20
  - Debian 10
  - RHEL Family 7/8
