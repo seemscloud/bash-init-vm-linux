@@ -32,3 +32,51 @@ chmod 700 "${BASE_DIR}"
 chmod 600 "${BASE_DIR}/${BASE_NAME}"
 chown root:root -R "${BASE_DIR}/${BASE_NAME}"
 ```
+---
+
+```bash
+#!/bin/bash
+
+BASE_DIR="/root/scripts"
+BASE_NAME="clean.sh"
+
+mkdir -p "${BASE_DIR}"
+
+cat > "${BASE_DIR}/${BASE_NAME}" << "EndOfMessage"
+#!/bin/bash
+
+systemctl stop ssh
+systemctl disable ssh
+rm -rfv /etc/ssh/ssh_host_*
+
+(apt-get update &&
+apt-get -y upgrade &&
+apt-get -y dist-upgrade ||
+yum update -y) 2>/dev/null
+
+(apt-get autoremove --purge -y apparmor ufw &&
+apt-get autoremove --purge &&
+apt-get autoclean &&
+apt-get clean ||
+yum clean all) 2>/dev/null
+
+for i in /tmp /var/log /var/tmp /var/cache ; do
+  find $i -maxdepth 1 -mindepth 1 -exec rm -rf {} \;
+done
+
+(dpkg -l | grep linux-image ||
+package-cleanup --oldkernels --count=1 ||
+dnf remove --oldinstallonly --setopt installonly_limit=1 kernel -y) 2>/dev/null
+
+(update-grub2 ||
+grub2-mkconfig -o /boot/grub2/grub.cfg) 2>/dev/null
+
+history -w
+history -c
+EndOfMessage
+
+chmod 700 "${BASE_DIR}"
+
+chmod 600 "${BASE_DIR}/${BASE_NAME}"
+chown root:root -R "${BASE_DIR}/${BASE_NAME}"
+```
