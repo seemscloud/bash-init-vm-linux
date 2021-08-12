@@ -199,21 +199,21 @@ rm -f zero
 REPORT_NAME="report.txt"
 >"${REPORT_NAME}"
 
-hostname >"${REPORT_NAME}" 2>&1
-hostname -f >"${REPORT_NAME}" 2>&1
+hostname >>"${REPORT_NAME}" 2>&1
+hostname -f >>"${REPORT_NAME}" 2>&1
 
-timedatectl >"${REPORT_NAME}" 2>&1
-lsb_release -a >"${REPORT_NAME}" 2>&1
-uname -a >"${REPORT_NAME}" 2>&1
+timedatectl >>"${REPORT_NAME}" 2>&1
+lsb_release -a >>"${REPORT_NAME}" 2>&1
+uname -a >>"${REPORT_NAME}" 2>&1
 
 cat /etc/hosts /etc/resolv.conf >report 2>&1
 
-cat /etc/network/interfaces.d/eth0.conf /etc/sysconfig/network-scripts/ifcfg-eth0 2>/dev/null >"${REPORT_NAME}" 2>&1
+cat /etc/network/interfaces.d/eth0.conf /etc/sysconfig/network-scripts/ifcfg-eth0 2>/dev/null >>"${REPORT_NAME}" 2>&1
 
-(systemctl is-enabled ssh || systemctl is-enabled sshd) 2>/dev/null >"${REPORT_NAME}" 2>&1
-(systemctl is-enabled chrony || systemctl is-enabled chronyd) 2>/dev/null >"${REPORT_NAME}" 2>&1
+(systemctl is-enabled ssh || systemctl is-enabled sshd) 2>/dev/null >>"${REPORT_NAME}" 2>&1
+(systemctl is-enabled chrony || systemctl is-enabled chronyd) 2>/dev/null >>"${REPORT_NAME}" 2>&1
 
-netstat -pltun >"${REPORT_NAME}" 2>&1
+netstat -pltun >>"${REPORT_NAME}" 2>&1
 
 clear
 cat "${REPORT_NAME}"
