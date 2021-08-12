@@ -24,6 +24,7 @@ cat > "${BASE_DIR}/${BASE_NAME}" << "EndOfMessage"
 
 (apt-get update || yum check-update) 2>/dev/null
 
+(apt-get install chrony -y || yum install chrony -y) 2>/dev/null
 (apt-get install lsb-release -y || yum install redhat-lsb-core -y) 2>/dev/null
 
 DISTRO_NAME="`(lsb_release -a 2>/dev/null | grep -Po "Distributor ID:\t\K[a-zA-Z]*")`"
@@ -38,6 +39,9 @@ fi
 
 (systemctl enable ssh || systemctl enable sshd) 2>/dev/null
 (systemctl restart ssh || systemctl restart sshd) 2>/dev/null
+
+(systemctl enable chrony || systemctl enable chronyd) 2>/dev/null
+(systemctl restart chrony || systemctl restart chronyd) 2>/dev/null
 EndOfMessage
 
 chmod 700 "${BASE_DIR}"
@@ -64,6 +68,9 @@ cat > "${BASE_DIR}/${BASE_NAME}" << "EndOfMessage"
 (systemctl disable ssh || systemctl disable sshd) 2>/dev/null
 (systemctl stop ssh || systemctl stop sshd) 2>/dev/null
 rm -rfv /etc/ssh/ssh_host_*
+
+(systemctl disable chrony || systemctl disable chronyd) 2>/dev/null
+(systemctl stop chrony || systemctl stop chronyd) 2>/dev/null
 
 (apt-get update &&
 apt-get -y upgrade &&
@@ -129,10 +136,12 @@ export IP_ADDR="10.10.10.10"
 export IP_NET="255.255.0.0"
 export IP_GW="10.10.0.101"
 
+export NEW_TIMEZONE="Europe/Warsaw"
 export NEW_HOSTNAME="hostname"
 export NEW_DOMAIN="localdomain"
 
 hostnamectl set-hostname "${NEW_HOSTNAME}"
+timedatectl set-timezone "${NEW_TIMEZONE}"
 
 UBUNTU_NET_DIR="/etc/network/interfaces.d"
 RHEL_NET_DIR="/etc/sysconfig/network-scripts"
