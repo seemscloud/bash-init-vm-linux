@@ -222,7 +222,7 @@ done
 netstat -pltun >>"${REPORT_NAME}" 2>&1
 timedatectl >>"${REPORT_NAME}" 2>&1
 
-clear
+clear ; clear
 cat "${REPORT_NAME}"
 rm -f "${REPORT_NAME}"
 ```
