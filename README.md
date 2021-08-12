@@ -41,7 +41,7 @@ SERVICES_LIST="ssh sshd postfix chrony chronyd cron crond rsyslog"
 
 for i in ${SERVICES_LIST} ; do 
 systemctl enable "${i}"
-systemctl restart "${i}"
+systemctl start "${i}"
 done
  
 EndOfMessage
