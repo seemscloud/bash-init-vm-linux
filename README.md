@@ -1,21 +1,9 @@
-## `Prepared for:`
- - Ubuntu 18/20
+## Prepare linux types:
+ - Ubuntu 18 / 20
  - Debian 10 (`probably works on 8/9`)
- - RHEL Family 7/8
-
-## `Network prepared with eth0 interface for`:
- - networking (Debian/Ubuntu)
- - network (RHEL Family)
+ - RHEL Family 7 / 8
 
 ---
-
-## Configure
-
- - `/etc/hosts`
- - `/etc/resolv.conf`
- - `/etc/network/interfaces.d/eth0.conf` (Ubuntu / Debian)
- - `/etc/sysconfig/network-scripts/eth0.conf` (RHEL Family)
- - `cron.d/system/flush.sh`
 
 ```bash
 find /root/ -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
