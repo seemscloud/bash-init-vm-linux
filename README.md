@@ -37,8 +37,8 @@ elif [ "${DISTRO_NAME}" == "OracleServer" ] ; then
   ssh-keygen -q -N '' -t ed25519 -f /etc/ssh/ssh_host_ed25519_key
 fi
 
-(systemctl enable ssh || systemctl enable sshd) 2>/dev/null
-(systemctl restart ssh || systemctl restart sshd) 2>/dev/null
+systemctl enable sshd
+systemctl restart sshd
 
 (systemctl enable chrony || systemctl enable chronyd) 2>/dev/null
 (systemctl restart chrony || systemctl restart chronyd) 2>/dev/null
@@ -65,8 +65,8 @@ mkdir -p "${BASE_DIR}"
 cat > "${BASE_DIR}/${BASE_NAME}" << "EndOfMessage"
 #!/bin/bash
 
-(systemctl disable ssh || systemctl disable sshd) 2>/dev/null
-(systemctl stop ssh || systemctl stop sshd) 2>/dev/null
+systemctl disable sshd
+systemctl stop sshd
 rm -rfv /etc/ssh/ssh_host_*
 
 (systemctl disable chrony || systemctl disable chronyd) 2>/dev/null
@@ -217,7 +217,7 @@ cat /etc/hosts /etc/resolv.conf >>"${REPORT_NAME}" 2>&1
 
 cat /etc/network/interfaces.d/eth0.conf /etc/sysconfig/network-scripts/ifcfg-eth0 2>/dev/null >>"${REPORT_NAME}"
 
-(systemctl is-enabled ssh || systemctl is-enabled sshd) 2>/dev/null >>"${REPORT_NAME}"
+systemctl is-enabled sshd >>"${REPORT_NAME}" 2>&1
 (systemctl is-enabled chrony || systemctl is-enabled chronyd) 2>/dev/null >>"${REPORT_NAME}"
 
 netstat -pltun >>"${REPORT_NAME}" 2>&1
