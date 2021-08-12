@@ -12,6 +12,10 @@
 `init.sh` / `clean.sh` / `resolv.conf`
 
 ```bash
+find /root/ -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
+
+#####################################################################
+
 BASE_DIR="/root/scripts"
 BASE_NAME="init.sh"
 
@@ -122,8 +126,6 @@ chmod 644 "${BASE_NAME}"
 chattr +i "${BASE_NAME}"
 
 #####################################################################
-
-find /root/ -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
 
 BASE_DIR="/root/cron.d"
 
