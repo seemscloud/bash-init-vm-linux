@@ -24,8 +24,7 @@ cat > "${BASE_DIR}/${BASE_NAME}" << "EndOfMessage"
 
 (apt-get update || yum check-update) 2>/dev/null
 
-(apt-get install chrony -y || yum install chrony -y) 2>/dev/null
-(apt-get install lsb-release -y || yum install redhat-lsb-core -y) 2>/dev/null
+(apt-get install chrony postfix lsb-release cron rsyslog -y || yum install chrony postfix redhat-lsb-core rsyslog cronie -y) 2>/dev/nullsystem
 
 DISTRO_NAME="`(lsb_release -a 2>/dev/null | grep -Po "Distributor ID:\t\K[a-zA-Z]*")`"
 
@@ -37,11 +36,13 @@ elif [ "${DISTRO_NAME}" == "OracleServer" ] ; then
   ssh-keygen -q -N '' -t ed25519 -f /etc/ssh/ssh_host_ed25519_key
 fi
 
-systemctl enable sshd
-systemctl restart sshd
+SERVICES_LIST="ssh sshd postfix chrony chronyd cron crond rsyslog"
 
-(systemctl enable chrony || systemctl enable chronyd) 2>/dev/null
-(systemctl restart chrony || systemctl restart chronyd) 2>/dev/null
+for i in ${SERVICES_LIST} ; do 
+systemctl enable "${i}"
+systemctl restart "${i}"
+done
+ 
 EndOfMessage
 
 chmod 700 "${BASE_DIR}"
@@ -69,8 +70,12 @@ systemctl disable sshd
 systemctl stop sshd
 rm -rfv /etc/ssh/ssh_host_*
 
-(systemctl disable chrony || systemctl disable chronyd) 2>/dev/null
-(systemctl stop chrony || systemctl stop chronyd) 2>/dev/null
+SERVICES_LIST="ssh sshd postfix chrony chronyd cron crond rsyslog"
+
+for i in ${SERVICES_LIST} ; do 
+systemctl disable "${i}"
+systemctl stop "${i}"
+done
 
 (apt-get update &&
 apt-get -y upgrade &&
