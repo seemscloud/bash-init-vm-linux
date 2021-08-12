@@ -99,7 +99,8 @@ nameserver 8.8.8.8
 nameserver 8.8.4.4
 
 options rotate
-options timeout:1 attempts:2
+options timeout:1
+options attempts:2
 EndOfMessage
 
 chattr +i /etc/resolv.conf
