@@ -171,26 +171,6 @@ fi
 
 ---
 
-`zeroing disk`
-
-```bash
-rm -f zero
-
-dd if=/dev/zero of=zero
-
-rm -f zero
-```
-
----
-
-`shirk vmware vmdk`
-
-```bash
-vmware-vdiskmanager -k disk.vmdk
-```
-
----
-
 `checks`
 
 ```bash
@@ -219,4 +199,24 @@ timedatectl >>"${REPORT_NAME}" 2>&1
 clear ; clear
 cat "${REPORT_NAME}"
 rm -f "${REPORT_NAME}"
+```
+
+---
+
+`zeroing disk`
+
+```bash
+rm -f zero
+
+dd if=/dev/zero of=zero
+
+rm -f zero
+```
+
+---
+
+`shirk vmware vmdk`
+
+```bash
+vmware-vdiskmanager -k disk.vmdk
 ```
