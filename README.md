@@ -35,9 +35,9 @@ elif [ "${DISTRO_NAME}" == "OracleServer" ] ; then
   ssh-keygen -q -N '' -t ed25519 -f /etc/ssh/ssh_host_ed25519_key
 fi
 
-SERVICES_LIST="ssh sshd postfix chrony chronyd cron crond rsyslog"
+BASE_SERVICES="ssh sshd postfix chrony chronyd cron crond rsyslog"
 
-for i in ${SERVICES_LIST} ; do 
+for i in ${BASE_SERVICES} ; do 
   systemctl enable "${i}" 2>/dev/null
   systemctl start "${i}" 2>/dev/null
 done
@@ -56,13 +56,11 @@ mkdir -p "${BASE_DIR}"
 cat > "${BASE_DIR}/${BASE_NAME}" << "EndOfMessage"
 #!/bin/bash
 
-systemctl disable sshd
-systemctl stop sshd
 rm -rfv /etc/ssh/ssh_host_*
 
-SERVICES_LIST="ssh sshd postfix chrony chronyd cron crond rsyslog"
+BASE_SERVICES="ssh sshd postfix chrony chronyd cron crond rsyslog"
 
-for i in ${SERVICES_LIST} ; do 
+for i in ${BASE_SERVICES} ; do 
   systemctl disable "${i}" 2>/dev/null
   systemctl stop "${i}" 2>/dev/null
 done
@@ -212,8 +210,11 @@ cat /etc/hosts /etc/resolv.conf >>"${REPORT_NAME}" 2>&1
 
 cat /etc/network/interfaces.d/eth0.conf /etc/sysconfig/network-scripts/ifcfg-eth0 2>/dev/null >>"${REPORT_NAME}"
 
-systemctl is-enabled sshd >>"${REPORT_NAME}" 2>&1
-(systemctl is-enabled chrony || systemctl is-enabled chronyd) 2>/dev/null >>"${REPORT_NAME}"
+BASE_SERVICES="ssh sshd postfix chrony chronyd cron crond rsyslog"
+
+for i in ${BASE_SERVICES} ; do
+systemctl is-enabled "${i}" 2>/dev/null >>"${REPORT_NAME}"
+done
 
 netstat -pltun >>"${REPORT_NAME}" 2>&1
 timedatectl >>"${REPORT_NAME}" 2>&1
