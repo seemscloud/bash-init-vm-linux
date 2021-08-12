@@ -180,3 +180,19 @@ dd if=/dev/zero of=zero
 
 rm -f zero
 ```
+
+---
+
+`checks`
+
+```bash
+clear 
+
+hostname
+hostname -f
+
+cat /etc/hosts
+cat /etc/resolv.conf
+
+cat /etc/network/interfaces.d/eth0.conf /etc/sysconfig/network-scripts/ifcfg-eth0 2>/dev/null
+```
