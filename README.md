@@ -38,8 +38,8 @@ fi
 SERVICES_LIST="ssh sshd postfix chrony chronyd cron crond rsyslog"
 
 for i in ${SERVICES_LIST} ; do 
-systemctl enable "${i}" 2>/dev/null
-systemctl start "${i}" 2>/dev/null
+  systemctl enable "${i}" 2>/dev/null
+  systemctl start "${i}" 2>/dev/null
 done
  
 EndOfMessage
@@ -63,8 +63,8 @@ rm -rfv /etc/ssh/ssh_host_*
 SERVICES_LIST="ssh sshd postfix chrony chronyd cron crond rsyslog"
 
 for i in ${SERVICES_LIST} ; do 
-systemctl disable "${i}" 2>/dev/null
-systemctl stop "${i}" 2>/dev/null
+  systemctl disable "${i}" 2>/dev/null
+  systemctl stop "${i}" 2>/dev/null
 done
 
 (apt-get update &&
