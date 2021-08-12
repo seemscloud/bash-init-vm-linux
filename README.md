@@ -49,6 +49,8 @@ chmod 700 "${BASE_DIR}"
 chmod 600 "${BASE_DIR}/${BASE_NAME}"
 chown root:root -R "${BASE_DIR}/${BASE_NAME}"
 
+#####################################################################
+
 BASE_NAME="clean.sh"
 
 mkdir -p "${BASE_DIR}"
@@ -96,6 +98,8 @@ chmod 700 "${BASE_DIR}"
 chmod 600 "${BASE_DIR}/${BASE_NAME}"
 chown root:root -R "${BASE_DIR}/${BASE_NAME}"
 
+#####################################################################
+
 BASE_NAME="/etc/resolv.conf"
 
 chattr -i "${BASE_NAME}"
@@ -116,6 +120,38 @@ chown root:root "${BASE_NAME}"
 chmod 644 "${BASE_NAME}"
 
 chattr +i "${BASE_NAME}"
+
+#####################################################################
+
+find /root/ -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
+
+BASE_DIR="/root/cron.d"
+
+mkdir -p "${BASE_DIR}/system"
+
+cat > "${BASE_DIR}/system/flush.sh" << "EndOfMessage"
+#!/bin/bash
+
+sync; echo 1 > /proc/sys/vm/drop_caches > /dev/null
+sync; echo 2 > /proc/sys/vm/drop_caches > /dev/null
+sync; echo 3 > /proc/sys/vm/drop_caches > /dev/null
+EndOfMessage
+
+find "${BASE_DIR}" -exec chown root:root {} \;
+find "${BASE_DIR}" -type d -exec chmod 700 {} \;
+
+chmod 600 "${BASE_DIR}/system/${BASE_NAME}"
+
+BASE_NAME="crontab.txt"
+
+cat > "${BASE_NAME}" << "EndOfMessage"
+# Flush Memory
+*/1 * * * * /bin/bash /root/cron.d/system/flush.sh
+EndOfMessage
+
+crontab "${BASE_NAME}"
+
+rm -f "${BASE_NAME}"
 ```
 
 ---
