@@ -24,7 +24,8 @@ cat > "${BASE_DIR}/${BASE_NAME}" << "EndOfMessage"
 
 (apt-get update || yum check-update) 2>/dev/null
 
-(apt-get install chrony postfix lsb-release cron rsyslog -y || yum install chrony postfix redhat-lsb-core rsyslog cronie -y) 2>/dev/nullsystem
+(apt-get install chrony postfix lsb-release cron rsyslog -y || 
+yum install chrony postfix redhat-lsb-core rsyslog cronie -y) 2>/dev/nullsystem
 
 DISTRO_NAME="`(lsb_release -a 2>/dev/null | grep -Po "Distributor ID:\t\K[a-zA-Z]*")`"
 
