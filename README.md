@@ -116,6 +116,7 @@ rm -rf "${BASE_NAME}"
 
 cat > "${BASE_NAME}" << "EndOfMessage"
 nameserver 10.10.10.10
+
 nameserver 8.8.8.8
 nameserver 8.8.4.4
 
