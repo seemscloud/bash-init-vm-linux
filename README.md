@@ -9,11 +9,9 @@
 
 ---
 
-`init.sh`
+`init.sh` / `clean.sh`
 
 ```bash
-#!/bin/bash
-
 BASE_DIR="/root/scripts"
 BASE_NAME="init.sh"
 
@@ -50,16 +48,7 @@ chmod 700 "${BASE_DIR}"
 
 chmod 600 "${BASE_DIR}/${BASE_NAME}"
 chown root:root -R "${BASE_DIR}/${BASE_NAME}"
-```
 
----
-
-`clean.sh`
-
-```bash
-#!/bin/bash
-
-BASE_DIR="/root/scripts"
 BASE_NAME="clean.sh"
 
 mkdir -p "${BASE_DIR}"
