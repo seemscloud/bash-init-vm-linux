@@ -216,5 +216,5 @@ cat /etc/network/interfaces.d/eth0.conf /etc/sysconfig/network-scripts/ifcfg-eth
 netstat -pltun >"${REPORT_NAME}" 2>&1
 
 clear
-cat report.txt
+cat "${REPORT_NAME}"
 ```
