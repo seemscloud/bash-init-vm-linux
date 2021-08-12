@@ -3,6 +3,10 @@
  - Debian 10 (`probably works on 8/9`)
  - RHEL Family 7/8
 
+Network prepared with eth0 interface for:
+ - networking (Debian/Ubuntu)
+ - network (RHEL Family)
+
 ---
 
 `init.sh`
@@ -96,6 +100,7 @@ chown root:root -R "${BASE_DIR}/${BASE_NAME}"
 ---
 
 `resolv.conf`
+
 ```bash
 BASE_NAME="/etc/resolv.conf"
 
@@ -113,4 +118,42 @@ options attempts:2
 EndOfMessage
 
 chattr +i /etc/resolv.conf
+```
+
+---
+
+`network`
+
+```bash
+export IP_ADDR="10.10.5.16"
+export IP_NET="255.255.0.0"
+export IP_GW="10.10.0.101"
+
+UBUNTU_NET_DIR="/etc/network/interfaces.d"
+RHEL_NET_DIR="/etc/sysconfig/network-scripts"
+
+if [ -d "${UBUNTU_NET_DIR}" ] ;then
+cat > "${UBUNTU_NET_DIR}/eth0.conf" << "EndOfMessage"
+auto eth0
+allow-hotplug eth0
+iface eth0 inet static
+        address ${IP_ADDR}
+        netmask ${IP_NET}
+        gateway ${IP_NET}
+EndOfMessage
+elif [ -d "${RHEL_NET_DIR}" ] ; then
+cat > "${RHEL_NET_DIR}/ifcfg-eth0" << "EndOfMessage"
+TYPE=Ethernet
+NAME=eth0
+DEVICE=eth0
+BOOTPROTO=none
+ONBOOT=yes
+DEFROUTE=yes
+PEERDNS=no
+PEERROUTE=no
+IPADDR=${IP_ADDR}
+NETMASK=${IP_NET}
+GATEWAY=${IP_NET}
+EndOfMessage
+fi
 ```
