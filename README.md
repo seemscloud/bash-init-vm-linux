@@ -104,7 +104,7 @@ chown root:root -R "${BASE_DIR}/${BASE_NAME}"
 ```bash
 BASE_NAME="/etc/resolv.conf"
 
-chattr -i /etc/resolv.conf
+chattr -i "${BASE_NAME}"
 rm -rf "${BASE_NAME}"
 
 cat > "${BASE_NAME}" << "EndOfMessage"
@@ -118,7 +118,10 @@ options timeout:1
 options attempts:2
 EndOfMessage
 
-chattr +i /etc/resolv.conf
+chown root:root "${BASE_NAME}"
+chmod 644 "${BASE_NAME}"
+
+chattr +i "${BASE_NAME}"
 ```
 
 ---
