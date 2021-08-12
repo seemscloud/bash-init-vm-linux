@@ -201,12 +201,15 @@ clear
 hostname
 hostname -f
 
-cat /etc/hosts
-cat /etc/resolv.conf
+hostnamectl
+timedatectl
+
+cat /etc/hosts /etc/resolv.conf
 
 cat /etc/network/interfaces.d/eth0.conf /etc/sysconfig/network-scripts/ifcfg-eth0 2>/dev/null
 
 (systemctl is-enabled ssh || systemctl is-enabled sshd) 2>/dev/null
+(systemctl is-enabled chrony || systemctl is-enabled chronyd) 2>/dev/null
 
 netstat -pltun
 ```
