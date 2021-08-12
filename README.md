@@ -3,6 +3,10 @@
  - Debian 10 (`probably works on 8/9`)
  - RHEL Family 7/8
 
+---
+
+`init.sh`
+
 ```bash
 #!/bin/bash
 
@@ -37,7 +41,10 @@ chmod 700 "${BASE_DIR}"
 chmod 600 "${BASE_DIR}/${BASE_NAME}"
 chown root:root -R "${BASE_DIR}/${BASE_NAME}"
 ```
+
 ---
+
+`clean.sh`
 
 ```bash
 #!/bin/bash
@@ -87,6 +94,8 @@ chown root:root -R "${BASE_DIR}/${BASE_NAME}"
 ```
 
 ---
+
+`resolv.conf`
 ```bash
 BASE_NAME="/etc/resolv.conf"
 
