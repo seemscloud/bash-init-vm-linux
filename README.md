@@ -9,7 +9,7 @@
 
 ---
 
-`init.sh` / `clean.sh`
+`init.sh` / `clean.sh` / `resolv.conf`
 
 ```bash
 BASE_DIR="/root/scripts"
@@ -95,13 +95,7 @@ chmod 700 "${BASE_DIR}"
 
 chmod 600 "${BASE_DIR}/${BASE_NAME}"
 chown root:root -R "${BASE_DIR}/${BASE_NAME}"
-```
 
----
-
-`resolv.conf`
-
-```bash
 BASE_NAME="/etc/resolv.conf"
 
 chattr -i "${BASE_NAME}"
