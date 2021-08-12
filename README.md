@@ -203,6 +203,8 @@ hostname -f
 
 hostnamectl
 timedatectl
+lsb_release -a
+uname -a
 
 cat /etc/hosts /etc/resolv.conf
 
