@@ -3,7 +3,7 @@
  - Debian 10 (`probably works on 8/9`)
  - RHEL Family 7/8
 
-Network prepared with eth0 interface for:
+`Network prepared with eth0 interface for`:
  - networking (Debian/Ubuntu)
  - network (RHEL Family)
 
