@@ -125,24 +125,35 @@ chattr +i /etc/resolv.conf
 `network`
 
 ```bash
-export IP_ADDR="10.10.5.16"
+export IP_ADDR="10.10.5.10"
 export IP_NET="255.255.0.0"
 export IP_GW="10.10.0.101"
+
+export NEW_HOSTNAME="ol7"
+export NEW_DOMAIN="localdomain"
+
+hostnamectl set-hostname "${NEW_HOSTNAME}"
 
 UBUNTU_NET_DIR="/etc/network/interfaces.d"
 RHEL_NET_DIR="/etc/sysconfig/network-scripts"
 
+cat > "/etc/hosts" << EndOfMessage
+127.0.0.1  localhost.localdomain  localhost
+
+${IP_ADDR}  ${NEW_HOSTNAME}.${NEW_DOMAIN}  ${NEW_HOSTNAME}
+EndOfMessage
+
 if [ -d "${UBUNTU_NET_DIR}" ] ;then
-cat > "${UBUNTU_NET_DIR}/eth0.conf" << "EndOfMessage"
+cat > "${UBUNTU_NET_DIR}/eth0.conf" << EndOfMessage
 auto eth0
 allow-hotplug eth0
 iface eth0 inet static
         address ${IP_ADDR}
         netmask ${IP_NET}
-        gateway ${IP_NET}
+        gateway ${IP_GW}
 EndOfMessage
 elif [ -d "${RHEL_NET_DIR}" ] ; then
-cat > "${RHEL_NET_DIR}/ifcfg-eth0" << "EndOfMessage"
+cat > "${RHEL_NET_DIR}/ifcfg-eth0" << EndOfMessage
 TYPE=Ethernet
 NAME=eth0
 DEVICE=eth0
@@ -153,7 +164,7 @@ PEERDNS=no
 PEERROUTE=no
 IPADDR=${IP_ADDR}
 NETMASK=${IP_NET}
-GATEWAY=${IP_NET}
+GATEWAY=${IP_GW}
 EndOfMessage
 fi
 ```
