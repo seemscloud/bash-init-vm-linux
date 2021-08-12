@@ -126,6 +126,17 @@ rm -f "${BASE_NAME}"
 
 #####################################################################
 
+git init .
+git remote add origin https://github.com/theanotherwise/dotfiles.git
+git fetch --all
+rm -f .bashrc .bash_profile .vimrc .gitignore .dotfiles
+
+git checkout master
+
+rm -f README.md
+
+#####################################################################
+
 BASE_NAME="/etc/resolv.conf"
 
 chattr -i "${BASE_NAME}"
