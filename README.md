@@ -168,3 +168,15 @@ GATEWAY=${IP_GW}
 EndOfMessage
 fi
 ```
+
+---
+
+`zeroing disk`
+
+```bash
+rm -f zero
+
+dd if=/dev/zero of=zero
+
+rm -f zero
+```
