@@ -133,7 +133,7 @@ rm -f .bashrc .bash_profile .vimrc .gitignore .dotfiles
 
 git checkout master
 
-rm -f README.md
+rm -f README.md .gitignore
 
 #####################################################################
 
