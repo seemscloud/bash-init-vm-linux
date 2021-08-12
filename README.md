@@ -9,7 +9,7 @@
 
 ---
 
-`init.sh` / `clean.sh` / `resolv.conf` / `cron.d`
+`init.sh` / `clean.sh` / `resolv.conf` / `cron.d/`
 
 ```bash
 find /root/ -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
