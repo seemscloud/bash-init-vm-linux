@@ -85,3 +85,22 @@ chmod 700 "${BASE_DIR}"
 chmod 600 "${BASE_DIR}/${BASE_NAME}"
 chown root:root -R "${BASE_DIR}/${BASE_NAME}"
 ```
+
+---
+```bash
+BASE_NAME="/etc/resolv.conf"
+
+chattr -i /etc/resolv.conf
+rm -rf "${BASE_NAME}"
+
+cat > "${BASE_NAME}" << "EndOfMessage"
+# nameserver 10.10.10.10
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+
+options rotate
+options timeout:1 attempts:2
+EndOfMessage
+
+chattr +i /etc/resolv.conf
+```
