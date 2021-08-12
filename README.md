@@ -197,7 +197,7 @@ rm -f zero
 
 ```bash
 REPORT_NAME="report.txt"
-rm -f "${REPORT_NAME}"
+>"${REPORT_NAME}"
 
 hostname >"${REPORT_NAME}" 2>&1
 hostname -f >"${REPORT_NAME}" 2>&1
@@ -217,4 +217,5 @@ netstat -pltun >"${REPORT_NAME}" 2>&1
 
 clear
 cat "${REPORT_NAME}"
+rm -f "${REPORT_NAME}"
 ```
