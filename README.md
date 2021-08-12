@@ -125,11 +125,11 @@ chattr +i /etc/resolv.conf
 `network`
 
 ```bash
-export IP_ADDR="10.10.5.10"
+export IP_ADDR="10.10.10.10"
 export IP_NET="255.255.0.0"
 export IP_GW="10.10.0.101"
 
-export NEW_HOSTNAME="ol7"
+export NEW_HOSTNAME="hostname"
 export NEW_DOMAIN="localdomain"
 
 hostnamectl set-hostname "${NEW_HOSTNAME}"
