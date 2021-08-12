@@ -213,7 +213,7 @@ hostname -f >>"${REPORT_NAME}" 2>&1
 lsb_release -a >>"${REPORT_NAME}" 2>&1
 uname -a >>"${REPORT_NAME}" 2>&1
 
-cat /etc/hosts /etc/resolv.conf >>report 2>&1
+cat /etc/hosts /etc/resolv.conf >>"${REPORT_NAME}" 2>&1
 
 cat /etc/network/interfaces.d/eth0.conf /etc/sysconfig/network-scripts/ifcfg-eth0 2>/dev/null >>"${REPORT_NAME}"
 
