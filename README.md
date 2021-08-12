@@ -196,7 +196,7 @@ rm -f zero
 `shirk vmdk`
 
 ```bash
-vmware-vdiskmanager -k disk.vmdk"
+vmware-vdiskmanager -k disk.vmdk
 ```
 
 ---
