@@ -139,6 +139,9 @@ Welcome to nixCraft Labs!
 Today is \d \t @ \n
 EndOfMessage
 
+chown root:root "${BASE_NAME}"
+chmod 644 "${BASE_NAME}"
+
 chattr +i "${BASE_NAME}"
 
 #####################################################################
