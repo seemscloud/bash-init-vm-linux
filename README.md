@@ -135,8 +135,10 @@ chattr -i "${BASE_NAME}"
 rm -f "${BASE_NAME}"
 
 cat > "${BASE_NAME}" << "EndOfMessage"
-Welcome to nixCraft Labs!
-Today is \d \t @ \n
+\t \d
+
+\l
+
 EndOfMessage
 
 chown root:root "${BASE_NAME}"
