@@ -135,8 +135,6 @@ chattr -i "${BASE_NAME}"
 rm -f "${BASE_NAME}"
 
 cat > "${BASE_NAME}" << "EndOfMessage"
-\t \d
-
 \l
 
 EndOfMessage
