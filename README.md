@@ -81,10 +81,10 @@ history -w
 history -c
 EndOfMessage
 
-chmod 700 "${BASE_DIR}"
+chmod 755 "${BASE_DIR}"
 
 find "${BASE_DIR}" -mindepth 1 -maxdepth 1 -type f -exec chown root:root {} \;
-find "${BASE_DIR}" -mindepth 1 -maxdepth 1 -type f -exec chmod 600 {} \;
+find "${BASE_DIR}" -mindepth 1 -maxdepth 1 -type f -exec chmod 644 {} \;
 
 #####################################################################
 
@@ -103,9 +103,9 @@ sync; echo 3 > /proc/sys/vm/drop_caches > /dev/null
 EndOfMessage
 
 find "${BASE_DIR}" -exec chown root:root {} \;
-find "${BASE_DIR}" -type d -exec chmod 700 {} \;
+find "${BASE_DIR}" -type d -exec chmod 755 {} \;
 
-chmod 600 "${BASE_DIR}/system/${BASE_NAME}"
+chmod 644 "${BASE_DIR}/system/${BASE_NAME}"
 
 BASE_NAME="crontab.file"
 
