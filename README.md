@@ -127,7 +127,19 @@ rm -f .bashrc .bash_profile .vimrc .gitignore .dotfiles
 
 git checkout master
 
-rm -f README.md .gitignore
+#####################################################################
+
+BASE_NAME="/etc/issue"
+
+chattr -i "${BASE_NAME}"
+rm -f "${BASE_NAME}"
+
+cat > "${BASE_NAME}" << "EndOfMessage"
+Welcome to nixCraft Labs!
+Today is \d \t @ \n
+EndOfMessage
+
+chattr +i "${BASE_NAME}"
 
 #####################################################################
 
