@@ -1,6 +1,6 @@
-## Prepare linux types:
+## Tested on:
  - Ubuntu 18 / 20
- - Debian 10 (`probably works on 8/9`)
+ - Debian 10
  - RHEL Family 7 / 8
 
 ---
