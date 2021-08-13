@@ -92,7 +92,7 @@ BASE_DIR="/root/cron.d"
 
 mkdir -p "${BASE_DIR}/system"
 
-BASE_NAME="${flush.sh}"
+BASE_NAME="flush.sh"
 
 cat > "${BASE_DIR}/system/${BASE_NAME}" << "EndOfMessage"
 #!/bin/bash
