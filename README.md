@@ -6,10 +6,6 @@
 ---
 
 ```bash
-find /root/ -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
-
-#####################################################################
-
 BASE_DIR="/root/scripts"
 
 mkdir -p "${BASE_DIR}"
@@ -39,6 +35,14 @@ for i in ${BASE_SERVICES} ; do
   systemctl start "${i}" 2>/dev/null
 done
  
+git init .
+git remote add origin https://github.com/theanotherwise/dotfiles.git
+git fetch --all
+
+git checkout master
+
+/bin/bash .dotfiles
+ 
 EndOfMessage
 
 #####################################################################
@@ -47,6 +51,8 @@ cat > "${BASE_DIR}/clean.sh" << "EndOfMessage"
 #!/bin/bash
 
 rm -rfv /etc/ssh/ssh_host_*
+
+find /root/ -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
 
 BASE_SERVICES="ssh sshd postfix chrony chronyd cron crond rsyslog"
 
@@ -117,16 +123,6 @@ EndOfMessage
 crontab "${BASE_NAME}"
 
 rm -f "${BASE_NAME}"
-
-#####################################################################
-
-git init .
-git remote add origin https://github.com/theanotherwise/dotfiles.git
-git fetch --all
-
-git checkout master
-
-/bin/bash .dotfiles
 
 #####################################################################
 
