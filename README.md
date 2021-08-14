@@ -20,9 +20,7 @@ cat > "${BASE_DIR}/init.sh" << "EndOfMessage"
 
 (apt-get update || yum check-update) 2>/dev/null
 
-(apt-get update &&
-apt-get -y upgrade &&
-apt-get -y dist-upgrade ||
+(apt-get -y upgrade && apt-get -y dist-upgrade ||
 yum update -y) 2>/dev/null
 
 (apt-get install chrony postfix lsb-release cron rsyslog git -y || 
