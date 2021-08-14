@@ -20,6 +20,11 @@ cat > "${BASE_DIR}/init.sh" << "EndOfMessage"
 
 (apt-get update || yum check-update) 2>/dev/null
 
+(apt-get update &&
+apt-get -y upgrade &&
+apt-get -y dist-upgrade ||
+yum update -y) 2>/dev/null
+
 (apt-get install chrony postfix lsb-release cron rsyslog git -y || 
 yum install chrony postfix redhat-lsb-core rsyslog cronie git -y) 2>/dev/nullsystem
 
@@ -54,11 +59,6 @@ for i in ${BASE_SERVICES} ; do
   systemctl disable "${i}" 2>/dev/null
   systemctl stop "${i}" 2>/dev/null
 done
-
-(apt-get update &&
-apt-get -y upgrade &&
-apt-get -y dist-upgrade ||
-yum update -y) 2>/dev/null
 
 (apt-get autoremove --purge -y apparmor ufw &&
 apt-get autoremove --purge &&
