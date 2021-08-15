@@ -87,16 +87,16 @@ apt-get autoclean &&
 apt-get clean ||
 yum clean all) 2>/dev/null
 
-for i in /tmp /var/log /var/tmp /var/cache /var/lib/apt /var/backups /var/lib/yum /var/spool/postfix /var/lib/sss /var/lib/selinux /usr/src ; do
-  find $i -maxdepth 1 -mindepth 1 -exec rm -rf {} \;
-done
-
 (dpkg -l | grep linux-image ||
 package-cleanup --oldkernels --count=1 ||
 dnf remove --oldinstallonly --setopt installonly_limit=1 kernel -y) 2>/dev/null
 
 (update-grub2 ||
 grub2-mkconfig -o /boot/grub2/grub.cfg) 2>/dev/null
+
+for i in /tmp /var/log /var/tmp /var/cache /var/lib/apt /var/backups /var/lib/yum /var/spool/postfix /var/lib/sss /var/lib/selinux /usr/src ; do
+  find $i -maxdepth 1 -mindepth 1 -exec rm -rf {} \;
+done
 
 history -w
 history -c
