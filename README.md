@@ -87,7 +87,7 @@ apt-get autoclean &&
 apt-get clean ||
 yum clean all) 2>/dev/null
 
-for i in /tmp /var/log /var/tmp /var/cache /var/lib/apt ; do
+for i in /tmp /var/log /var/tmp /var/cache /var/lib/apt /var/backups /var/lib/yum /var/spool/postfix /var/lib/sss /var/lib/selinux ; do
   find $i -maxdepth 1 -mindepth 1 -exec rm -rf {} \;
 done
 
