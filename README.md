@@ -29,7 +29,7 @@ EndOfMessage
 ```
 
 ---
-# VM Scripts
+# Scripts
 
 ```bash
 INIT_DIR="${HOME}/scripts/init" ; mkdir -p "${INIT_DIR}"
