@@ -137,7 +137,9 @@ echo -e "\e[31mOpen ports\e[m\n`netstat -pltun`\n"
 echo -e "\e[31mTimezones\e[m\n`timedatectl`\n"
 EndOfMessage
 
-/bin/bash "${INIT_PATH}"
+#####################################################################
+
+find "${INIT_DIR}" -type f -exec chmod 644 {} \;
 ```
 
 ---
