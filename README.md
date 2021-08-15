@@ -1,9 +1,3 @@
-## Tested on:
- - Ubuntu 18 / 20
- - Debian 10
- - RHEL Family 7 / 8
-
----
 # Dot files
 
 ```bash
