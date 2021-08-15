@@ -4,18 +4,39 @@
  - RHEL Family 7 / 8
 
 ---
+# Dot files
 
 ```bash
+cat > ~/init.sh << "EndOfMessage"
+#!/bin/bash
 
-find /root/ -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
+find "${HOME}" -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
 
-#####################################################################
+(apt-get update || yum check-update) 2>/dev/null
+(apt-get install git -y || yum install git -y) 2>/dev/null
 
-BASE_DIR="/root/scripts"
+git init .
+git remote add origin https://github.com/theanotherwise/dotfiles.git
+git fetch --all
+git checkout master
 
-mkdir -p "${BASE_DIR}"
+/bin/bash ~/.dotfiles.sh
 
-cat > "${BASE_DIR}/init.sh" << "EndOfMessage"
+rm -rf ~/.git ~/.gitignore ~/.dotfiles.sh
+EndOfMessage
+
+/bin/bash ~/init.sh
+```
+
+---
+# VM Scripts
+
+```bash
+INIT_DIR="${HOME}/scripts/init" ; mkdir -p "${INIT_DIR}"
+
+INIT_PATH="${INIT_DIR}/setup.sh"
+
+cat > "${INIT_PATH}" << "EndOfMessage"
 #!/bin/bash
 
 (apt-get update || yum check-update) 2>/dev/null
@@ -23,8 +44,8 @@ cat > "${BASE_DIR}/init.sh" << "EndOfMessage"
 (apt-get -y upgrade && apt-get -y dist-upgrade ||
 yum update -y) 2>/dev/null
 
-(apt-get install chrony postfix lsb-release cron rsyslog git -y || 
-yum install chrony postfix redhat-lsb-core rsyslog cronie git -y) 2>/dev/nullsystem
+(apt-get install chrony lsb-release cron rsyslog -y ||
+yum install chrony redhat-lsb-core cronie rsyslog -y) 2>/dev/null
 
 DISTRO_NAME="`(lsb_release -a 2>/dev/null | grep -Po "Distributor ID:\t\K[a-zA-Z]*")`"
 
@@ -36,24 +57,26 @@ elif [ "${DISTRO_NAME}" == "OracleServer" ] ; then
   ssh-keygen -q -N '' -t ed25519 -f /etc/ssh/ssh_host_ed25519_key
 fi
 
-BASE_SERVICES="ssh sshd postfix chrony chronyd cron crond rsyslog"
+BASE_SERVICES="ssh sshd chrony chronyd cron crond rsyslog"
 
-for i in ${BASE_SERVICES} ; do 
+for i in ${BASE_SERVICES} ; do
   systemctl enable "${i}" 2>/dev/null
   systemctl start "${i}" 2>/dev/null
-done 
+done
 EndOfMessage
 
 #####################################################################
 
-cat > "${BASE_DIR}/clean.sh" << "EndOfMessage"
+INIT_PATH="${INIT_DIR}/clean.sh"
+
+cat > "${INIT_PATH}" << "EndOfMessage"
 #!/bin/bash
 
 rm -rfv /etc/ssh/ssh_host_*
 
-BASE_SERVICES="ssh sshd postfix chrony chronyd cron crond rsyslog"
+BASE_SERVICES="ssh sshd chrony chronyd cron crond rsyslog"
 
-for i in ${BASE_SERVICES} ; do 
+for i in ${BASE_SERVICES} ; do
   systemctl disable "${i}" 2>/dev/null
   systemctl stop "${i}" 2>/dev/null
 done
@@ -79,68 +102,73 @@ history -w
 history -c
 EndOfMessage
 
-chmod 755 "${BASE_DIR}"
-
-find "${BASE_DIR}" -mindepth 1 -maxdepth 1 -type f -exec chown root:root {} \;
-find "${BASE_DIR}" -mindepth 1 -maxdepth 1 -type f -exec chmod 644 {} \;
-
 #####################################################################
 
-BASE_DIR="/root/cron.d"
+INIT_PATH="${INIT_DIR}/report.sh"
 
-mkdir -p "${BASE_DIR}/system"
+cat > "${INIT_PATH}" << "EndOfMessage"
+clear ; clear
 
-BASE_NAME="flush.sh"
+echo -e "\e[31mHostname\e[m: `hostname`\n" 
+echo -e "\e[31mHostname (FQDN)\e[m: `hostname -f`\n"
 
-cat > "${BASE_DIR}/system/${BASE_NAME}" << "EndOfMessage"
-#!/bin/bash
+echo -e "\e[31mLSB Release\e[m\n`lsb_release -a 2>&1`\n"
+echo -e "\e[31mUname\e[m: `uname -a`\n"
 
-sync; echo 1 > /proc/sys/vm/drop_caches > /dev/null
-sync; echo 2 > /proc/sys/vm/drop_caches > /dev/null
-sync; echo 3 > /proc/sys/vm/drop_caches > /dev/null
+echo -e "\e[31m/etc/hosts\e[m\n`cat /etc/hosts`\n"
+echo -e "\e[31m/etc/resolv.conf\e[m\n`cat /etc/resolv.conf`\n"
+
+echo -e "\e[31mNetwork configuration\e[m"
+
+(cat /etc/network/interfaces.d/eth0.conf || 
+cat /etc/sysconfig/network-scripts/ifcfg-eth0) 2>/dev/null ; echo
+
+BASE_SERVICES="ssh sshd chrony chronyd cron crond rsyslog"
+
+for i in ${BASE_SERVICES} ; do
+  echo -e "\e[31mService '${i}' is \e[m `systemctl is-enabled "${i}" 2>/dev/null`"
+  echo -e "\e[31mService '${i}' is \e[m `systemctl is-active "${i}" 2>/dev/null`"
+done
+
+echo
+
+echo -e "\e[31mOpen ports\e[m\n`netstat -pltun`\n"
+
+echo -e "\e[31mTimezones\e[m\n`timedatectl`\n"
 EndOfMessage
 
-find "${BASE_DIR}" -exec chown root:root {} \;
-find "${BASE_DIR}" -type d -exec chmod 755 {} \;
+/bin/bash "${INIT_PATH}"
+```
 
-chmod 644 "${BASE_DIR}/system/${BASE_NAME}"
+---
+# System files
 
-BASE_NAME="crontab.file"
+```bash
+INIT_DIR="/etc"
+INIT_PATH="${INIT_DIR}/issue"
 
-cat > "${BASE_NAME}" << "EndOfMessage"
-# Flush Memory
-*/1 * * * * /bin/bash /root/cron.d/system/flush.sh
-EndOfMessage
+chattr -i "${INIT_PATH}"
+rm -fv "${INIT_PATH}"
 
-crontab "${BASE_NAME}"
-
-rm -f "${BASE_NAME}"
-
-#####################################################################
-
-BASE_NAME="/etc/issue"
-
-chattr -i "${BASE_NAME}"
-rm -f "${BASE_NAME}"
-
-cat > "${BASE_NAME}" << "EndOfMessage"
+cat > "${INIT_PATH}" << "EndOfMessage"
 \l
 
 EndOfMessage
 
-chown root:root "${BASE_NAME}"
-chmod 644 "${BASE_NAME}"
+chown root:root "${INIT_PATH}"
+chmod 644 "${INIT_PATH}"
 
-chattr +i "${BASE_NAME}"
+chattr +i "${INIT_PATH}"
 
 #####################################################################
 
-BASE_NAME="/etc/resolv.conf"
+INIT_DIR="/etc"
+INIT_PATH="${INIT_DIR}/resolv.conf"
 
-chattr -i "${BASE_NAME}"
-rm -f "${BASE_NAME}"
+chattr -i "${INIT_PATH}"
+rm -fv "${INIT_PATH}"
 
-cat > "${BASE_NAME}" << "EndOfMessage"
+cat > "${INIT_PATH}" << "EndOfMessage"
 nameserver 10.10.10.10
 nameserver 8.8.8.8
 nameserver 8.8.4.4
@@ -148,25 +176,14 @@ nameserver 8.8.4.4
 options rotate timeout:1 attempts:2
 EndOfMessage
 
-chown root:root "${BASE_NAME}"
-chmod 644 "${BASE_NAME}"
+chown root:root "${INIT_PATH}"
+chmod 644 "${INIT_PATH}"
 
-chattr +i "${BASE_NAME}"
-
-#####################################################################
-
-git init .
-git remote add origin https://github.com/theanotherwise/dotfiles.git
-git fetch --all
-
-git checkout master
-
-/bin/bash .dotfiles
+chattr +i "${INIT_PATH}"
 ```
 
 ---
-
-`network`
+# Network
 
 ```bash
 export IP_ADDR="10.10.10.10"
@@ -217,39 +234,8 @@ fi
 
 ---
 
-`checks`
 
-```bash
-REPORT_NAME="report.txt"
->"${REPORT_NAME}"
-
-hostname >>"${REPORT_NAME}" 2>&1
-hostname -f >>"${REPORT_NAME}" 2>&1
-
-lsb_release -a >>"${REPORT_NAME}" 2>&1
-uname -a >>"${REPORT_NAME}" 2>&1
-
-cat /etc/hosts /etc/resolv.conf >>"${REPORT_NAME}" 2>&1
-
-cat /etc/network/interfaces.d/eth0.conf /etc/sysconfig/network-scripts/ifcfg-eth0 2>/dev/null >>"${REPORT_NAME}"
-
-BASE_SERVICES="ssh sshd postfix chrony chronyd cron crond rsyslog"
-
-for i in ${BASE_SERVICES} ; do
-systemctl is-enabled "${i}" 2>/dev/null >>"${REPORT_NAME}"
-done
-
-netstat -pltun >>"${REPORT_NAME}" 2>&1
-timedatectl >>"${REPORT_NAME}" 2>&1
-
-clear ; clear
-cat "${REPORT_NAME}"
-rm -f "${REPORT_NAME}"
-```
-
----
-
-`zeroing disk`
+# Zeroing disk
 
 ```bash
 rm -f zero
@@ -261,7 +247,7 @@ rm -f zero
 
 ---
 
-`shirk vmware vmdk`
+# Shirk vmware vmdk
 
 ```bash
 vmware-vdiskmanager -k disk.vmdk
