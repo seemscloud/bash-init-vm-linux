@@ -165,8 +165,8 @@ rm -fv "${INIT_PATH}"
 
 cat > "${INIT_PATH}" << "EndOfMessage"
 nameserver 10.10.10.10
-nameserver 8.8.8.8
-nameserver 8.8.4.4
+# nameserver 8.8.8.8
+# nameserver 8.8.4.4
 
 options rotate timeout:1 attempts:2
 EndOfMessage
