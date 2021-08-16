@@ -158,7 +158,6 @@ chattr +i "${INIT_PATH}"
 
 #####################################################################
 
-INIT_DIR="/etc"
 INIT_PATH="${INIT_DIR}/resolv.conf"
 
 chattr -i "${INIT_PATH}"
